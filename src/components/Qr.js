@@ -3,22 +3,18 @@ import QrReader from 'react-qr-scanner';
 import Students from '../data/students.json';
 import Check from '../data/check.png';
 import Late from '../data/sad.png';
-import '../styles/Attendance.css';
-import db from '../config/FirestoreConfig';
 
-class Qr extends Component {
+class Test extends Component {
   constructor(props){
     super(props)
     this.state = {
       delay: 1500,
-      greeting: '',
       result: '',
       time: ''
     }
 
     this.handleScan = this.handleScan.bind(this)
     this.handleLate = this.handleLate.bind(this);
-    this.handleSaveData = this.handleSaveData.bind(this);
   }
 
   handleScan(data){
@@ -29,47 +25,29 @@ class Qr extends Component {
 
     this.setState({
       result: data,
-      time: time,
-      greeting: ''
+      time: time
     })
 
     if(data !== null){
       const student = Students.find(x => x.id === data);
-      this.handleLate(today.getHours(), today.getMinutes(), student);
+      const greeting = "Hola, " + student.name;
+      console.log(greeting);
+      this.handleLate(toString(today.getHours()));
     }
   }
 
-  handleLate(hours, minutes, student){
-    const lateH = 8;
-    const lateM = 10;
+  handleLate(time){
+    const late = 8;
     let result = '';
-    let attendance = '';
-    if(hours === lateH && minutes <= lateM){
+    if(time.split(0, 2) <= late){
       result = Check;
-      attendance = "✅";
     }
     else{
       result = Late;
-      attendance = "⏲️";
     }
-
-    this.handleSaveData(student, hours, minutes, attendance);
     this.setState({
-      result: result,
-      greeting: "Hola, " + student.name
+      result: result
     })
-  }
-
-  handleSaveData(student, hours, minutes, attendance){
-    const time = hours + ":" + minutes;
-
-    db.collection("users").add({
-      name: student,
-      time: time,
-      attendance: attendance
-    }).then(() => {
-      console.log('agregado');
-    });
   }
 
   handleError(err){
@@ -83,20 +61,17 @@ class Qr extends Component {
     }
 
     return(
-      <div className="attendance-qr">
+      <div className="qr">
         <QrReader
           delay={this.state.delay}
           style={previewStyle}
           onError={this.handleError}
           onScan={this.handleScan}
           />
-        <div className="attendance-message">
-          <img className="attendance-img" src={this.state.result} ></img>
-          <h1 className="attendance-greeting">{this.state.greeting}</h1>
-        </div>
+        <img src={this.state.result}></img>
       </div>
     )
   }
 }
 
-export default Qr;
+export default Test;
