@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import fireBase from '../config/fireBase';
+import fireBase from '../config/FirestoreConfig';
 
-class Login extends Component {
+class FormLogin extends Component {
   constructor(props) {
     super(props);
     this.login = this.login.bind(this);
@@ -52,4 +52,4 @@ class Login extends Component {
     );
   }
 }
-export default Login;
+export default FormLogin;
