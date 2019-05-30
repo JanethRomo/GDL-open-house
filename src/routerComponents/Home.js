@@ -9,7 +9,7 @@ class Home extends Component {
 
 
     logout() {
-        fireBase.auth().signOut();
+    fireBase.auth().signOut();
     }
 
     render() {
